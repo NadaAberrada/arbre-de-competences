@@ -1,13 +1,10 @@
 <?php
-
 class Stagiaire
 {
     private $Id;
     private $Nom;
     private $CNE;
     private $Ville;
-
-
     public function getId()
     {
         return $this->Id;
@@ -16,7 +13,6 @@ class Stagiaire
     {
         $this->Id = $id;
     }
-
     public function getNom()
     {
         return $this->Nom;
@@ -25,7 +21,6 @@ class Stagiaire
     {
         $this->Nom = $nom;
     }
-
     public function getCNE()
     {
         return $this->CNE;
@@ -34,7 +29,6 @@ class Stagiaire
     {
         $this->CNE = $CNE;
     }
-
     public function getVille()
     {
         return $this->Ville;
