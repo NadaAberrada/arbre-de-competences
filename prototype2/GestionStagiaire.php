@@ -51,49 +51,93 @@ class GestionStagiaire
         return $Stagiaires;
     }
     public function ajouterStagiaire($nom, $cne, $ville)
-{
-    try {
-        // Check if the intern with the same CNE already exists
-        $checkSql = "SELECT personne.Id FROM personne INNER JOIN ville ON personne.villeid = ville.id WHERE personne.CNE = :CNE";
-        $checkResult = $this->pdo->prepare($checkSql);
-        $checkResult->bindParam(':CNE', $cne, PDO::PARAM_STR);
-        $checkResult->execute();
-        $existingIntern = $checkResult->fetch(PDO::FETCH_ASSOC);
+    {
+        try {
+            // Check if the intern with the same CNE already exists
+            $checkSql = "SELECT personne.Id FROM personne INNER JOIN ville ON personne.villeid = ville.id WHERE personne.CNE = :CNE";
+            $checkResult = $this->pdo->prepare($checkSql);
+            $checkResult->bindParam(':CNE', $cne, PDO::PARAM_STR);
+            $checkResult->execute();
+            $existingIntern = $checkResult->fetch(PDO::FETCH_ASSOC);
 
-        if ($existingIntern) {
-            
+            if ($existingIntern) {
+
+                return false;
+            }
+
+            // Check if the ville exists or add it if it doesn't
+            $queryVille = "SELECT id FROM ville WHERE Ville = :nom_ville";
+            $stmtVille = $this->pdo->prepare($queryVille);
+            $stmtVille->bindParam(':nom_ville', $ville);
+            $stmtVille->execute();
+
+            $id_ville = $stmtVille->fetch(PDO::FETCH_ASSOC);
+
+            if (!$id_ville) {
+
+                return false;
+            }
+
+            // Insert the new intern
+            $queryPersonne = "INSERT INTO personne (nom, CNE, villeid) VALUES (:nom, :cne, :idville)";
+            $stmtPersonne = $this->pdo->prepare($queryPersonne);
+            $stmtPersonne->bindParam(':nom', $nom);
+            $stmtPersonne->bindParam(':cne', $cne);
+            $stmtPersonne->bindParam(':idville', $id_ville['id']);
+            $stmtPersonne->execute();
+
+            // Get the ID of the newly inserted intern
+            $personneId = $this->pdo->lastInsertId();
+
+            return $personneId;
+        } catch (PDOException $e) {
+            // Handle any database errors here
             return false;
         }
-
-        // Check if the ville exists or add it if it doesn't
-        $queryVille = "SELECT id FROM ville WHERE Ville = :nom_ville";
-        $stmtVille = $this->pdo->prepare($queryVille);
-        $stmtVille->bindParam(':nom_ville', $ville);
-        $stmtVille->execute();
-
-        $id_ville = $stmtVille->fetch(PDO::FETCH_ASSOC);
-
-        if (!$id_ville) {
-            
-            return false;
-        }
-
-        // Insert the new intern
-        $queryPersonne = "INSERT INTO personne (nom, CNE, villeid) VALUES (:nom, :cne, :idville)";
-        $stmtPersonne = $this->pdo->prepare($queryPersonne);
-        $stmtPersonne->bindParam(':nom', $nom);
-        $stmtPersonne->bindParam(':cne', $cne);
-        $stmtPersonne->bindParam(':idville', $id_ville['id']);
-        $stmtPersonne->execute();
-
-        // Get the ID of the newly inserted intern
-        $personneId = $this->pdo->lastInsertId();
-
-        return $personneId;
-    } catch (PDOException $e) {
-        // Handle any database errors here
-        return false;
     }
-}
 
+
+
+    public function ModifierStagiaire($id, $nom, $cne, $ville)
+    {
+        try {
+            // Check if the intern with the given ID exists 
+            $checkSql = "SELECT * FROM personne WHERE id = :id";
+            $checkResult = $this->pdo->prepare($checkSql);
+            $checkResult->bindParam(':id', $id, PDO::PARAM_INT);
+            $checkResult->execute();
+            $existingIntern = $checkResult->fetch(PDO::FETCH_ASSOC);
+
+            if (!$existingIntern) {
+                return false;
+            }
+
+            // Check if the ville exists or add it if it doesn't
+            $queryVille = "SELECT id FROM ville WHERE Ville = :nom_ville";
+            $stmtVille = $this->pdo->prepare($queryVille);
+            $stmtVille->bindParam(':nom_ville', $ville);
+            $stmtVille->execute();
+
+            $id_ville = $stmtVille->fetch(PDO::FETCH_ASSOC);
+
+            if (!$id_ville) {
+                // Ville doesn't exist, you might want to handle this case
+                return false;
+            }
+
+            // Update the intern's details
+            $updateSql = "UPDATE personne SET nom = :nom, CNE = :cne, villeid = :idville WHERE id = :id";
+            $updateResult = $this->pdo->prepare($updateSql);
+            $updateResult->bindParam(':id', $id, PDO::PARAM_INT);
+            $updateResult->bindParam(':nom', $nom);
+            $updateResult->bindParam(':cne', $cne);
+            $updateResult->bindParam(':idville', $id_ville['id']);
+            $updateResult->execute();
+
+            return true; // Intern details updated successfully
+        } catch (PDOException $e) {
+            // Handle any database errors here
+            return false;
+        }
+    }
 }
