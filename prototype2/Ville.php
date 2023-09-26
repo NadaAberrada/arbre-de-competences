@@ -1,5 +1,5 @@
 <?php
-class Villes{
+class Ville{
     private $IdVille;
     private $Ville;
 
