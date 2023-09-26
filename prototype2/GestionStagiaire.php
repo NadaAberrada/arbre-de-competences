@@ -29,7 +29,7 @@ class GestionStagiaire
             echo "Failed to connect with MySQL: " . $e->getMessage();
         }
     }
-    public function getStagiaires()
+    public function afficherStagiaires()
     {
         $sql = "SELECT personne.id, personne.Nom, personne.CNE, ville.Ville FROM personne LEFT JOIN ville ON personne.villeid = ville.id;";
         $stmt = $this->pdo->prepare($sql);
@@ -140,4 +140,36 @@ class GestionStagiaire
             return false;
         }
     }
+
+
+
+
+    public function supprimerStagiaire($id)
+{
+    try {
+        // Check if the intern with the given ID exists 
+        $checkSql = "SELECT * FROM personne WHERE id = :id";
+        $checkResult = $this->pdo->prepare($checkSql);
+        $checkResult->bindParam(':id', $id, PDO::PARAM_INT);
+        $checkResult->execute();
+        $existingIntern = $checkResult->fetch(PDO::FETCH_ASSOC);
+
+        if (!$existingIntern) {
+            // Intern with the given ID does not exist, you might want to handle this case
+            return false;
+        }
+
+        // Delete the intern
+        $deleteSql = "DELETE FROM personne WHERE id = :id";
+        $deleteResult = $this->pdo->prepare($deleteSql);
+        $deleteResult->bindParam(':id', $id, PDO::PARAM_INT);
+        $deleteResult->execute();
+
+        return true; // Intern deleted successfully
+    } catch (PDOException $e) {
+        // Handle any database errors here
+        return false;
+    }
+}
+
 }
