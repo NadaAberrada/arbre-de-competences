@@ -61,7 +61,7 @@ class GestionStagiaire
         $existingIntern = $checkResult->fetch(PDO::FETCH_ASSOC);
 
         if ($existingIntern) {
-            // Intern with the same CNE already exists, you might want to handle this case
+            
             return false;
         }
 
@@ -74,7 +74,7 @@ class GestionStagiaire
         $id_ville = $stmtVille->fetch(PDO::FETCH_ASSOC);
 
         if (!$id_ville) {
-            // Ville doesn't exist, you might want to handle this case
+            
             return false;
         }
 
