@@ -1,3 +1,13 @@
+<?php
+include "./GestionStagiaire.php";
+$GestionStagiaire = new GestionStagiaire();
+$Stagiaire = new Stagiaire();
+// Assuming you have the selectedStagiaireId from the URL
+$selectedStagiaireId = $_GET['id'] ?? null;
+
+// Fetch the selected stagiaire's data
+$selectedStagiaire = $GestionStagiaire->getStagiaireById($selectedStagiaireId);
+?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -12,47 +22,32 @@
 
 <body>
 
-    <h2>Modification de voter profile : </h2>
+    <h2>Modification de votre profil :</h2>
     <form action="" method="post">
         <div class="container"> 
-             <label for="CNE"><b>CNE</b></label>
-            <input id="CNE" type="text" placeholder="Enter CNE" name="CNE" >  
+            <label for="CNE"><b>CNE</b></label>
+            <input id="CNE" type="text" placeholder="Enter CNE" name="CNE" value="<?= $selectedStagiaire ? $selectedStagiaire->getCNE() : '' ?>" required>  
             
             <label for="nom"><b>Nom</b></label>
-            <input id="nom" type="text" placeholder="Enter Nom" name="nom" >
-
-          
+            <input id="nom" type="text" placeholder="Enter Nom" name="nom" value="<?= $selectedStagiaire ? $selectedStagiaire->getNom() : '' ?>" required>
 
             <label for="ville"><b>Ville</b></label>
-            <input id="ville" type="text" placeholder="Enter ville" name="ville" > 
+            <input id="ville" type="text" placeholder="Enter Ville" name="ville" value="<?= $selectedStagiaire ? $selectedStagiaire->getVille() : '' ?>" required>
 
             <button id="edit" type="submit" name="edit"><b>Modifier</b> </button>
         </div>
     </form>
 
-
-
-<?php 
-include "GestionStagiaire.php";
-
-$gestionStagiaires = new GestionStagiaire();
-$Stagiaire = new Stagiaire();
-
-
-
-
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $Stagiaire->setNom($_POST['nom']);
-    $Stagiaire->setCNE($_POST['CNE']);
-    $Stagiaire->setVilleid($_POST['ville']);
-    $gestionStagiaires->ModifierStagiaire($Stagiaire);
-}
-
-
-
-
-?>
+    <?php
+    // Handle form submission
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $Stagiaire->getId($selectedStagiaireId); 
+        $Stagiaire->setNom($_POST['nom']);
+        $Stagiaire->setCNE($_POST['CNE']);
+        $Stagiaire->setVille($_POST['ville']);
+        $GestionStagiaire->ModifierStagiaire($Stagiaire);
+    }
+    ?>
 </body>
 
 </html>

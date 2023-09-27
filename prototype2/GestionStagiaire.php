@@ -50,6 +50,34 @@ class GestionStagiaire
         }
         return $Stagiaires;
     }
+    public function getStagiaireById($id)
+    {
+        $sql = "SELECT personne.id, personne.Nom, personne.CNE, ville.Ville 
+            FROM personne 
+            LEFT JOIN ville ON personne.villeid = ville.id 
+            WHERE personne.id = :id";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $stagiaireData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$stagiaireData) {
+            return null; // Stagiaire with the given ID not found
+        }
+
+        $stagiaire = new Stagiaire();
+        $ville = new Ville();
+
+        $stagiaire->setId($stagiaireData['id']);
+        $stagiaire->setNom($stagiaireData['Nom']);
+        $stagiaire->setCNE($stagiaireData['CNE']);
+        $ville->setVille($stagiaireData['Ville']);
+        $stagiaire->setVille($ville->getVille());
+
+        return $stagiaire;
+    }
+
     public function ajouterStagiaire($nom, $cne, $ville)
     {
         try {
@@ -103,7 +131,7 @@ class GestionStagiaire
         try {
             $id = $stg->getId();
             $nom = $stg->getNom();
-            $CNE = $stg->getCNE();
+            $cne = $stg->getCNE();
             $ville = $stg->getVille();
 
             // Check if the intern with the given ID exists 
@@ -150,31 +178,30 @@ class GestionStagiaire
 
 
     public function supprimerStagiaire($id)
-{
-    try {
-        // Check if the intern with the given ID exists 
-        $checkSql = "SELECT * FROM personne WHERE id = :id";
-        $checkResult = $this->pdo->prepare($checkSql);
-        $checkResult->bindParam(':id', $id, PDO::PARAM_INT);
-        $checkResult->execute();
-        $existingIntern = $checkResult->fetch(PDO::FETCH_ASSOC);
+    {
+        try {
+            // Check if the intern with the given ID exists 
+            $checkSql = "SELECT * FROM personne WHERE id = :id";
+            $checkResult = $this->pdo->prepare($checkSql);
+            $checkResult->bindParam(':id', $id, PDO::PARAM_INT);
+            $checkResult->execute();
+            $existingIntern = $checkResult->fetch(PDO::FETCH_ASSOC);
 
-        if (!$existingIntern) {
-            // Intern with the given ID does not exist, you might want to handle this case
+            if (!$existingIntern) {
+                // Intern with the given ID does not exist, you might want to handle this case
+                return false;
+            }
+
+            // Delete the intern
+            $deleteSql = "DELETE FROM personne WHERE id = :id";
+            $deleteResult = $this->pdo->prepare($deleteSql);
+            $deleteResult->bindParam(':id', $id, PDO::PARAM_INT);
+            $deleteResult->execute();
+
+            return true; // Intern deleted successfully
+        } catch (PDOException $e) {
+            // Handle any database errors here
             return false;
         }
-
-        // Delete the intern
-        $deleteSql = "DELETE FROM personne WHERE id = :id";
-        $deleteResult = $this->pdo->prepare($deleteSql);
-        $deleteResult->bindParam(':id', $id, PDO::PARAM_INT);
-        $deleteResult->execute();
-
-        return true; // Intern deleted successfully
-    } catch (PDOException $e) {
-        // Handle any database errors here
-        return false;
     }
-}
-
 }

@@ -1,17 +1,10 @@
 <?php
 include "./GestionStagiaire.php";
 
-
-
 // Trouver tous les stagiaire depuis la base de données 
 $GestionStagiaire = new GestionStagiaire();
 $StagiaresData = $GestionStagiaire->getStagiaires();
-
-
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -48,7 +41,10 @@ $StagiaresData = $GestionStagiaire->getStagiaires();
         tr:nth-child(even) {
             background-color: #dddddd;
         }
-    </style>
+
+        .action-column {
+            width: 20%;
+        }
     </style>
 </head>
 
@@ -60,24 +56,22 @@ $StagiaresData = $GestionStagiaire->getStagiaires();
                 <th>Nom</th>
                 <th>CNE</th>
                 <th>Ville</th>
+                <th class="action-column">Modification</th>
+                <th class="action-column">Supprimer</th>
             </tr>
             <?php
             foreach ($StagiaresData as $Stagiaire) {
             ?>
                 <tr>
                     <td><?= $Stagiaire->getNom() ? $Stagiaire->getNom() : "null" ?></td>
-                    <td>
-                        <?= $Stagiaire->getCNE() ? $Stagiaire->getCNE() : "null"; ?>
-                    </td>
-                    <td>
-                        <?= $Stagiaire->getVille() ? $Stagiaire->getVille() : "null"; ?>
-                    </td>
+                    <td><?= $Stagiaire->getCNE() ? $Stagiaire->getCNE() : "null"; ?></td>
+                    <td><?= $Stagiaire->getVille() ? $Stagiaire->getVille() : "null"; ?></td>
+                    <td><a href="modification.php?id=<?= $Stagiaire->getId() ?>">Modifier</a></td>
+                    <td><a href="delete_stagiaire.php?id=<?= $Stagiaire->getId() ?>">Supprimer</a></td>
                 </tr>
             <?php } ?>
         </table>
     </div>
-
-
 </body>
 
 </html>
