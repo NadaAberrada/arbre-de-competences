@@ -126,24 +126,17 @@ class GestionStagiaire
 
 
 
-    public function ModifierStagiaire($stg)
+    public function ModifierStagiaire(Stagiaire $stagiaire)
     {
         try {
-            $id = $stg->getId();
-            $nom = $stg->getNom();
-            $cne = $stg->getCNE();
-            $ville = $stg->getVille();
-
-            // Check if the intern with the given ID exists 
-            $checkSql = "SELECT * FROM personne WHERE id = :id";
-            $checkResult = $this->pdo->prepare($checkSql);
-            $checkResult->bindParam(':id', $id, PDO::PARAM_INT);
-            $checkResult->execute();
-            $existingIntern = $checkResult->fetch(PDO::FETCH_ASSOC);
-
-            if (!$existingIntern) {
-                return false;
-            }
+            
+            $id = $stagiaire->getId();
+            $nom = $stagiaire->getNom();
+            $cne = $stagiaire->getCNE();
+            $ville = $stagiaire->getVille();
+            
+          
+            
 
             // Check if the ville exists or add it if it doesn't
             $queryVille = "SELECT id FROM ville WHERE Ville = :nom_ville";

@@ -41,10 +41,9 @@ $selectedStagiaire = $GestionStagiaire->getStagiaireById($selectedStagiaireId);
     <?php
     // Handle form submission
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $Stagiaire->getId($selectedStagiaireId); 
-        $Stagiaire->setNom($_POST['nom']);
-        $Stagiaire->setCNE($_POST['CNE']);
-        $Stagiaire->setVille($_POST['ville']);
+
+        $stagaiaire = new Stagiaire($selectedStagiaireId,$_POST['nom'],$_POST['CNE'],$_POST['ville']);
+
         $GestionStagiaire->ModifierStagiaire($Stagiaire);
     }
     ?>
