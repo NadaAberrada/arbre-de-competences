@@ -1,6 +1,6 @@
 <?php
 class Ville{
-    private $IdVille;
+   
     private $Ville;
 
     public function getVille()
@@ -11,12 +11,7 @@ class Ville{
     {
         $this->Ville = $Ville;
     }
-    public function getIdVille(){
-        return $this->IdVille;
-    }
-    public function setIdVille($IdVille){
-        $this->IdVille = $IdVille;
-    }
+    
 
 }
 

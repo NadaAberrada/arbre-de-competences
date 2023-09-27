@@ -7,7 +7,7 @@ class GestionStagiaire
     private $serverName = "localhost";
     private $username = "root";
     private $password = "";
-    private $dbname  = "prototype2";
+    private $dbname  = "prototype1";
     private $charset = "utf8mb4";
     protected $pdo;
 
@@ -29,7 +29,7 @@ class GestionStagiaire
             echo "Failed to connect with MySQL: " . $e->getMessage();
         }
     }
-    public function afficherStagiaires()
+    public function getStagiaires()
     {
         $sql = "SELECT personne.id, personne.Nom, personne.CNE, ville.Ville FROM personne LEFT JOIN ville ON personne.villeid = ville.id;";
         $stmt = $this->pdo->prepare($sql);
@@ -98,9 +98,14 @@ class GestionStagiaire
 
 
 
-    public function ModifierStagiaire($id, $nom, $cne, $ville)
+    public function ModifierStagiaire($stg)
     {
         try {
+            $id = $stg->getId();
+            $nom = $stg->getNom();
+            $CNE = $stg->getCNE();
+            $ville = $stg->getVille();
+
             // Check if the intern with the given ID exists 
             $checkSql = "SELECT * FROM personne WHERE id = :id";
             $checkResult = $this->pdo->prepare($checkSql);
