@@ -134,10 +134,6 @@ class GestionStagiaire
             $nom = $stagiaire->getNom();
             $cne = $stagiaire->getCNE();
             $ville = $stagiaire->getVille();
-            
-          
-            
-
             // Check if the ville exists or add it if it doesn't
             $queryVille = "SELECT id FROM ville WHERE Ville = :nom_ville";
             $stmtVille = $this->pdo->prepare($queryVille);
@@ -150,7 +146,6 @@ class GestionStagiaire
                 // Ville doesn't exist, you might want to handle this case
                 return false;
             }
-
             // Update the intern's details
             $updateSql = "UPDATE personne SET nom = :nom, CNE = :cne, villeid = :idville WHERE id = :id";
             $updateResult = $this->pdo->prepare($updateSql);
@@ -163,6 +158,7 @@ class GestionStagiaire
             return true; // Intern details updated successfully
         } catch (PDOException $e) {
             // Handle any database errors here
+            echo "Error: " . $e->getMessage();
             return false;
         }
     }

@@ -2,6 +2,7 @@
 include "./GestionStagiaire.php";
 $GestionStagiaire = new GestionStagiaire();
 $Stagiaire = new Stagiaire();
+
 // Assuming you have the selectedStagiaireId from the URL
 $selectedStagiaireId = $_GET['id'] ?? null;
 
@@ -41,11 +42,23 @@ $selectedStagiaire = $GestionStagiaire->getStagiaireById($selectedStagiaireId);
     <?php
     // Handle form submission
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $id = $selectedStagiaireId; // Use the ID from the URL
+        $nom = $_POST['nom'];
+        $cne = $_POST['CNE'];
+        $ville = $_POST['ville'];
+ 
+        $stagaiaire = new Stagiaire($id, $nom, $cne, $ville);
+      
+        // Call the function to modify the Stagiaire
+        $success = $GestionStagiaire->ModifierStagiaire($stagaiaire);
 
-        $stagaiaire = new Stagiaire($selectedStagiaireId,$_POST['nom'],$_POST['CNE'],$_POST['ville']);
-
-        $GestionStagiaire->ModifierStagiaire($Stagiaire);
+        if ($success) {
+            echo "<p>Modification successful!</p>";
+        } else {
+            echo "<p>Modification failed. Please check your input or try again later.</p>";
+        }
     }
+    
     ?>
 </body>
 
