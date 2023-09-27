@@ -129,7 +129,7 @@ class GestionStagiaire
     public function ModifierStagiaire(Stagiaire $stagiaire)
     {
         try {
-            
+
             $id = $stagiaire->getId();
             $nom = $stagiaire->getNom();
             $cne = $stagiaire->getCNE();
@@ -187,9 +187,16 @@ class GestionStagiaire
             $deleteResult->bindParam(':id', $id, PDO::PARAM_INT);
             $deleteResult->execute();
 
-            return true; // Intern deleted successfully
+            // Check if any rows were affected
+            if ($deleteResult->rowCount() > 0) {
+                return true; // Intern deleted successfully
+            } else {
+                // No rows affected, deletion might have failed
+                return false;
+            }
         } catch (PDOException $e) {
             // Handle any database errors here
+            echo "Error: " . $e->getMessage();
             return false;
         }
     }
