@@ -130,14 +130,14 @@ class GestionStagiaire
 
 
 
-    public function ModifierStagiaire(Stagiaire $stagiaire)
+    public function ModifierStagiaire($id, $nom, $cne, $ville)
     {
         try {
 
-            $id = $stagiaire->getId();
-            $nom = $stagiaire->getNom();
-            $cne = $stagiaire->getCNE();
-            $ville = $stagiaire->getVille();
+            $id = $id;
+            $nom =  $nom;
+            $cne = $cne;
+            $ville = $ville;
             // Check if the ville exists or add it if it doesn't
             $queryVille = "SELECT id FROM ville WHERE Ville = :nom_ville";
             $stmtVille = $this->pdo->prepare($queryVille);

@@ -24,7 +24,28 @@ $selectedStagiaire = $GestionStagiaire->getStagiaireById($selectedStagiaireId);
 <body>
 
     <h2>Modification de votre profil :</h2>
-    <form action="" method="post">
+    <?php
+    // Handle form submission
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $id = $selectedStagiaireId; // Use the ID from the URL
+        $nom = $_POST['nom'];
+        $cne = $_POST['CNE'];
+        $ville = $_POST['ville'];
+ 
+        // $stagaiaire = new Stagiaire();
+      
+        // Call the function to modify the Stagiaire
+        $success = $GestionStagiaire->ModifierStagiaire($id, $nom, $cne, $ville);
+
+        if ($success) {
+            echo "<p>Modification successful!</p>";
+        } else {
+            echo "<p>Modification failed. Please check your input or try again later.</p>";
+        }
+    }
+    
+    ?>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
         <div class="container"> 
             <label for="CNE"><b>CNE</b></label>
             <input id="CNE" type="text" placeholder="Enter CNE" name="CNE" value="<?= $selectedStagiaire ? $selectedStagiaire->getCNE() : '' ?>" required>  
@@ -39,27 +60,7 @@ $selectedStagiaire = $GestionStagiaire->getStagiaireById($selectedStagiaireId);
         </div>
     </form>
 
-    <?php
-    // Handle form submission
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $id = $selectedStagiaireId; // Use the ID from the URL
-        $nom = $_POST['nom'];
-        $cne = $_POST['CNE'];
-        $ville = $_POST['ville'];
- 
-        $stagaiaire = new Stagiaire($id, $nom, $cne, $ville);
-      
-        // Call the function to modify the Stagiaire
-        $success = $GestionStagiaire->ModifierStagiaire($stagaiaire);
-
-        if ($success) {
-            echo "<p>Modification successful!</p>";
-        } else {
-            echo "<p>Modification failed. Please check your input or try again later.</p>";
-        }
-    }
-    
-    ?>
+   
 </body>
 
 </html>
