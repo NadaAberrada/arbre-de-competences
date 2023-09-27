@@ -13,7 +13,8 @@ $StagiaresData = $GestionStagiaire->getStagiaires();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./UI/Style/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <title>Arbre Competences</title>
     <style>
         .container {
@@ -45,12 +46,18 @@ $StagiaresData = $GestionStagiaire->getStagiaires();
         .action-column {
             width: 20%;
         }
+        .ajouter-button {
+            margin-bottom: 20px;
+            padding: 10px 20px; /* Adjust padding as needed */
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <h2>Arbre des Competences</h2>
+
+        <a href="ajouter.php" class="btn btn-primary ajouter-button pb-3">Ajouter Stagiaire</a>
         <table>
             <tr>
                 <th>Nom</th>
@@ -58,6 +65,7 @@ $StagiaresData = $GestionStagiaire->getStagiaires();
                 <th>Ville</th>
                 <th class="action-column">Modification</th>
                 <th class="action-column">Supprimer</th>
+        
             </tr>
             <?php
             foreach ($StagiaresData as $Stagiaire) {
@@ -68,6 +76,8 @@ $StagiaresData = $GestionStagiaire->getStagiaires();
                     <td><?= $Stagiaire->getVille() ? $Stagiaire->getVille() : "null"; ?></td>
                     <td><a href="modification.php?id=<?= $Stagiaire->getId() ?>">Modifier</a></td>
                     <td><a href="delete_stagiaire.php?id=<?= $Stagiaire->getId() ?>">Supprimer</a></td>
+                    
+
                 </tr>
             <?php } ?>
         </table>

@@ -77,35 +77,37 @@ class GestionStagiaire
 
         return $stagiaire;
     }
-
     public function ajouterStagiaire($nom, $cne, $ville)
     {
         try {
+            // Validate input
+            if (empty($nom) || empty($cne) || empty($ville)) {
+                return false; // Input values are not valid
+            }
+    
             // Check if the intern with the same CNE already exists
             $checkSql = "SELECT personne.Id FROM personne INNER JOIN ville ON personne.villeid = ville.id WHERE personne.CNE = :CNE";
             $checkResult = $this->pdo->prepare($checkSql);
             $checkResult->bindParam(':CNE', $cne, PDO::PARAM_STR);
             $checkResult->execute();
             $existingIntern = $checkResult->fetch(PDO::FETCH_ASSOC);
-
+    
             if ($existingIntern) {
-
-                return false;
+                return false; // Stagiaire with the same CNE already exists
             }
-
+    
             // Check if the ville exists or add it if it doesn't
             $queryVille = "SELECT id FROM ville WHERE Ville = :nom_ville";
             $stmtVille = $this->pdo->prepare($queryVille);
             $stmtVille->bindParam(':nom_ville', $ville);
             $stmtVille->execute();
-
+    
             $id_ville = $stmtVille->fetch(PDO::FETCH_ASSOC);
-
+    
             if (!$id_ville) {
-
-                return false;
+                return false; // Ville doesn't exist
             }
-
+    
             // Insert the new intern
             $queryPersonne = "INSERT INTO personne (nom, CNE, villeid) VALUES (:nom, :cne, :idville)";
             $stmtPersonne = $this->pdo->prepare($queryPersonne);
@@ -113,16 +115,18 @@ class GestionStagiaire
             $stmtPersonne->bindParam(':cne', $cne);
             $stmtPersonne->bindParam(':idville', $id_ville['id']);
             $stmtPersonne->execute();
-
+    
             // Get the ID of the newly inserted intern
             $personneId = $this->pdo->lastInsertId();
-
+    
             return $personneId;
         } catch (PDOException $e) {
             // Handle any database errors here
+            echo "Error: " . $e->getMessage();
             return false;
         }
     }
+    
 
 
 
