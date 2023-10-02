@@ -205,6 +205,6 @@ class GestionStagiaire
         $chartData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Encode the data as JSON
-        $chartDataJSON = json_encode($chartData);
+        return json_encode($chartData);
     }
 }
