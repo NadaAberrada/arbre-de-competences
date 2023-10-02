@@ -84,19 +84,7 @@ class GestionStagiaire
             if (empty($nom) || empty($cne) || empty($ville)) {
                 return false; // Input values are not valid
             }
-    
-            // Check if the intern with the same CNE already exists
-            $checkSql = "SELECT personne.Id FROM personne INNER JOIN ville ON personne.villeid = ville.id WHERE personne.CNE = :CNE";
-            $checkResult = $this->pdo->prepare($checkSql);
-            $checkResult->bindParam(':CNE', $cne, PDO::PARAM_STR);
-            $checkResult->execute();
-            $existingIntern = $checkResult->fetch(PDO::FETCH_ASSOC);
-    
-            if ($existingIntern) {
-                return false; // Stagiaire with the same CNE already exists
-            }
-    
-            // Check if the ville exists or add it if it doesn't
+             // Check if the ville exists or add it if it doesn't
             $queryVille = "SELECT id FROM ville WHERE Ville = :nom_ville";
             $stmtVille = $this->pdo->prepare($queryVille);
             $stmtVille->bindParam(':nom_ville', $ville);
