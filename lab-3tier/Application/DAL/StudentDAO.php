@@ -50,6 +50,27 @@ class StudentDAO{
 
         return false;
     }
+    public function AddStudent($student)
+    {
+
+        $sql = "INSERT INTO Student ( `Name`, `Email`, `DateOfBirth`)
+                VALUES (
+                  :name,
+                  :email,
+                  :dateOfBirth
+                )";
+    $stmt=$this->db->prepare($sql);
+    $name=$student->GetName();
+    $email=$student->GetEmail();
+    $dob=$student->GetDateOfBirth();
+    $stmt->bindParam(':name',$name);
+    $stmt->bindParam(':email',$email);
+    $stmt->bindParam(':dateOfBirth',$dob);
+    $stmt->execute();
+    $lastInsertId=$this->db->lastInsertId();
+    return $lastInsertId;
+
+    }
 
 
 }
