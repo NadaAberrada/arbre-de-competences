@@ -1,0 +1,86 @@
+<?php
+
+
+class StudentBLO
+{
+
+
+    public $studentDao;
+    public $errorMessage;
+
+    public function __construct()
+    {
+        $this->studentDao = new StudentDAO();
+    }
+    public function GetAllStudents()
+    {
+        return $this->studentDao->GetAllStudents();
+    }
+    public function GetStudent($studentId)
+    {
+
+        return $this->studentDao->GetStudent($studentId);
+    }
+
+
+    public function addStudent($student)
+    {
+        $insertedId = 0;
+        if ($student->GetName() == '' || $student->GetEmail() == '') {
+            $this->errorMessage = 'Student Name, Roll and Email is required.';
+            return $insertedId;
+        }
+        if ($this->IsValidStudent($student)) {
+            $insertedId = (int)$this->studentDao->AddStudent($student);
+        }
+
+        return $insertedId;
+    }
+    public function updateStudent($student)
+    {
+        $affectedRows = 0;
+        if ($student->GetName() == '' || $student->GetEmail() == '') {
+            $this->errorMessage = 'Student Name, Roll and Email is required.';
+            return $affectedRows;
+        }
+        if ($this->IsValidStudent($student)) {
+            $affectedRows = (int)$this->studentDao->UpdateStudent($student);
+        }
+        return $affectedRows;
+    }
+    public function deleteStudent($studentId)
+    
+    {
+        $affectedRows = 0;
+                
+        if($studentId > 0) {
+            if ($this->IsIdExists($studentId)) {
+                $affectedRows = (int)$this->studentDao->DeleteStudent($studentId);
+            } else {
+                $this->errorMessage = 'Record not found.';
+            }
+        } else {
+            $this->errorMessage = 'Invalid Id.';
+        }
+
+        return $affectedRows;
+    }
+
+    public function IsValidStudent($student) {
+        if ( $this->IsEmailExists($student->GetEmail(), $student->GetId()) ) {
+            $this->errorMessage = 'Email '. $student->GetEmail() .' already exists. Try a different one.';
+            return false;
+        } else {
+            return true;
+        }
+    }
+    public function IsEmailExists($email, $id) {
+        return $this->studentDao->IsEmailExists($email, $id);
+    }
+    public function IsIdExists($id) {
+        return $this->studentDao->IsIdExists($id);
+    }
+
+
+    
+}
