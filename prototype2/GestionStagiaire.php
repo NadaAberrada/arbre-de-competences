@@ -71,7 +71,7 @@ class GestionStagiaire
 
         $stagiaire->setId($stagiaireData['id']);
         $stagiaire->setNom($stagiaireData['Nom']);
-        $stagiaire->setCNE($stagiaireData['CNE']);
+        $stagiaire->setCNE($stagiaireData['CNE']);      
         $ville->setVille($stagiaireData['Ville']);
         $stagiaire->setVille($ville->getVille());
 
