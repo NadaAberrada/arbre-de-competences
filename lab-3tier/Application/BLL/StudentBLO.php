@@ -77,9 +77,7 @@ class StudentBLO
     public function IsEmailExists($email, $id) {
         return $this->studentDao->IsEmailExists($email, $id);
     }
-    public function IsIdExists($id) {
-        return $this->studentDao->IsIdExists($id);
-    }
+ 
 
 
     

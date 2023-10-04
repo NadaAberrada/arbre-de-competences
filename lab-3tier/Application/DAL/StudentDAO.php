@@ -71,6 +71,20 @@ class StudentDAO{
     return $lastInsertId;
 
     }
+    public function UpdateStudent($student)
+    {
+        $sql="UPDATE Student SET
+        Name='".$student->GetName(). "',
+        Email='".$student->GetEmail(). "',
+        DateOfBirth='".$student->GetDateOfBirth(). "'
+        WHERE Id=".$student->GetId();
+        $stmt=$this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->rowCount();
+        $stmt=$this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
 
 
 }
