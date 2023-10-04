@@ -90,5 +90,15 @@ class StudentDAO{
         $stmt->execute();
         return $stmt->rowCount();
     }
+    public function IsIdExist($id){
+        $sql="SELECT * FROM Student WHERE Id =". $id;
+        $stmt=$this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
+
+    public function IsEmailExists($email, $id=0) {
+
+    }
 
 }
