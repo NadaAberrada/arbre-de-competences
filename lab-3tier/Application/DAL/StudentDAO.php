@@ -85,7 +85,11 @@ class StudentDAO{
         $stmt->execute();
         return $stmt->rowCount();
     }
-
+    public function DeleteStudent($studentId){
+        $sql="DELETE FROM students WHERE Id =". $studentId;
+        $stmt=$this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
 
 }
-?>
