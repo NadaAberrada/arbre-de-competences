@@ -33,7 +33,6 @@ class StudentDAO{
     public function GetStudent($studentId)
     {
         if($studentId <= 0) {
-            // TODO: return type should be same datatype
             return false;
         }
         $sql = "SELECT * FROM Student WHERE Id = :studentId";
